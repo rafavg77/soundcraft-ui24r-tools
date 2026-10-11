@@ -1,0 +1,42 @@
+# Build Artifacts
+build/
+*.so
+*.o
+*.a
+*.dylib
+
+# Dependencies
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+
+# Audio Files & Raw Recordings
+*.wav
+*.mp3
+*.flac
+*.aac
+*.uirecsession
+Multitrack/
+sessions/
+
+# Logs & Telemetry
+logs/
+*.log
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Environment Variables & Local Secrets
+.env
+.env.*
+*.local
+
+# System & Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

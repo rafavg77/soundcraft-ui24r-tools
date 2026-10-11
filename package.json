@@ -1,0 +1,45 @@
+{
+  "name": "soundcraft-ui24r-tools",
+  "version": "1.0.0",
+  "description": "Comprehensive automation suite, real-time telemetry monitor, and multi-track audio engine for the Soundcraft Ui24R digital mixer.",
+  "main": "lib/ui24r.js",
+  "bin": {
+    "ui24r-audit": "bin/ui24r-audit.js",
+    "ui24r-multitrack": "bin/ui24r-multitrack.js",
+    "ui24r-monitor": "bin/ui24r-monitor.js",
+    "ui24r-mute": "bin/ui24r-mute.js",
+    "ui24r-calibrate": "bin/ui24r-calibrate.js",
+    "ui24r-fix-vocal": "bin/ui24r-fix-karime.js",
+    "ui24r-fix-speech": "bin/ui24r-fix-orador.js",
+    "ui24r-session-unify": "bin/ui24r-session-unify.py",
+    "ui24r-session-info": "bin/ui24r-session-info.py"
+  },
+  "scripts": {
+    "build": "make",
+    "clean": "make clean",
+    "audit": "node bin/ui24r-audit.js",
+    "monitor": "node bin/ui24r-monitor.js",
+    "mtk": "node bin/ui24r-multitrack.js",
+    "calibrate": "node bin/ui24r-calibrate.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafavg77/soundcraft-ui24r-tools.git"
+  },
+  "keywords": [
+    "soundcraft",
+    "ui24r",
+    "digital-mixer",
+    "audio-engineering",
+    "multitrack",
+    "telemetry",
+    "dsp",
+    "websocket",
+    "mcp"
+  ],
+  "author": "rafavg77",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
