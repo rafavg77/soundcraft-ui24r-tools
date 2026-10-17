@@ -64,16 +64,28 @@ def analyze_wav_file(filepath, native_lib=None):
         max_abs = 0
 
         raw_bytes = w.readframes(n_frames)
+        actual_frames = len(raw_bytes) // 2
+        if actual_frames == 0:
+            return {
+                'channels': n_channels,
+                'bit_depth': sampwidth * 8,
+                'sample_rate': framerate,
+                'frames': 0,
+                'duration_sec': 0,
+                'peak_dbfs': -100.0,
+                'rms_dbfs': -100.0,
+                'status': 'EMPTY'
+            }
 
         if native_lib:
-            c_buf = (ctypes.c_int16 * n_frames).from_buffer_copy(raw_bytes)
+            c_buf = (ctypes.c_int16 * actual_frames).from_buffer_copy(raw_bytes[:actual_frames * 2])
             p_peak = ctypes.c_float()
             p_rms = ctypes.c_float()
             p_raw = ctypes.c_int16()
 
             native_lib.analyze_track_stats(
                 c_buf,
-                n_frames,
+                actual_frames,
                 ctypes.byref(p_peak),
                 ctypes.byref(p_rms),
                 ctypes.byref(p_raw)

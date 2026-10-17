@@ -94,15 +94,19 @@ def unify_session(
                 print(f"  [-] Skipping {fname}: non-mono or non-16bit PCM ({channels}ch, {sampwidth*8}bit)")
                 continue
 
-            if total_frames is None:
-                total_frames = frames
-                sample_rate = sr
-            else:
-                total_frames = min(total_frames, frames)
-
             print(f"  [+] Loading track: {fname} ({frames} frames, {sr} Hz)")
             raw = w.readframes(frames)
-            buf = (ctypes.c_int16 * frames).from_buffer_copy(raw)
+            actual_frames = len(raw) // 2
+            if actual_frames == 0:
+                print(f"  [-] Skipping {fname}: empty track buffer")
+                continue
+            if total_frames is None:
+                total_frames = actual_frames
+                sample_rate = sr
+            else:
+                total_frames = min(total_frames, actual_frames)
+
+            buf = (ctypes.c_int16 * actual_frames).from_buffer_copy(raw[:actual_frames * 2])
             buffers.append(buf)
             track_names.append(fname)
 
