@@ -118,7 +118,12 @@ async function main() {
     // 4. Equalizer / High-Pass Filter
     mixer.set(`${p}eq.bypass`, s.eqBypass);
     mixer.set(`${p}eq.hpffreq`, s.hpfFreq);
-    if (s.lpfFreq) mixer.set(`${p}eq.lpffreq`, s.lpfFreq);
+    mixer.set(`${p}eq.hpf.freq`, s.hpfFreq);
+    mixer.set(`${p}eq.hpf.slope`, 1);
+    if (s.lpfFreq) {
+      mixer.set(`${p}eq.lpffreq`, s.lpfFreq);
+      mixer.set(`${p}eq.lpf.freq`, s.lpfFreq);
+    }
     console.log(`  [+] High-Pass EQ:  ACTIVE (Stage rumble filtered below HPF cutoff)`);
 
     // Ensure channel is unmuted and armed safely
