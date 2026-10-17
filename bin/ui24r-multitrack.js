@@ -92,6 +92,35 @@ async function main() {
       const chName = mixer.get(`i.${targetCh - 1}.name`) || `CH ${targetCh}`;
       console.log(`✅ Isolated capture configured: Only CH ${targetCh} (${chName}) is armed.`);
 
+    } else if (ACTION === 'arm-worship') {
+      console.log('🎯 Arming all Worship team channels (Band, Vocals & Tracks)...');
+      const worshipChannels = [1, 2, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 20, 21, 22];
+      for (let i = 0; i < 24; i++) {
+        mixer.set(`i.${i}.mtkrec`, worshipChannels.includes(i + 1) ? 1 : 0);
+      }
+      mixer.set('l.0.mtkrec', 1);
+      mixer.set('l.1.mtkrec', 1);
+      mixer.set('var.mtk.soundcheck', 0);
+
+      await new Promise((r) => setTimeout(r, 1000));
+      console.log('✅ Worship channels armed. Disconnected and talkback channels disarmed.');
+
+    } else if (ACTION === 'record' || ACTION === 'start') {
+      const isRec = mixer.get('var.mtk.rec.currentState') === '1';
+      if (isRec) {
+        console.log('🔴 Recording is ALREADY in progress.');
+      } else {
+        console.log('🔴 Starting USB multitrack recording...');
+        mixer.send('MTK_REC_TOGGLE');
+        await new Promise((r) => setTimeout(r, 2000));
+      }
+
+      const status = mixer.getMultitrackStatus();
+      console.log(`\nTransport State:    ${status.recording ? '🔴 RECORDING' : '⏹️ STOPPED'}`);
+      console.log(`Recording Time:     ${status.timeSeconds} seconds`);
+      console.log(`USB Free Space:     ${status.freeSpaceGB.toFixed(2)} GB`);
+      console.log(`Armed Tracks:       ${status.armedChannels.length}`);
+
     } else if (ACTION === 'stop') {
       console.log('⏹️ Sending Stop command to USB multitrack recorder...');
       mixer.send('MTK_STOP');
@@ -110,7 +139,7 @@ async function main() {
       console.log('🎉 It is now 100% safe to physically remove the USB drive from the front panel.\n');
 
     } else {
-      console.log(`Usage: ui24r-multitrack [status | arm-live | arm-all | arm-channel <1-24> | stop]`);
+      console.log(`Usage: ui24r-multitrack [status | arm-live | arm-worship | arm-all | arm-channel <1-24> | start/record | stop]`);
     }
 
   } catch (err) {
